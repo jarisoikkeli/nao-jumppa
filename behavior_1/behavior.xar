@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ChoregrapheProject xmlns="http://www.ald.softbankrobotics.com/schema/choregraphe/project.xsd" xar_version="3">
+  <Box name="root" id="-1" localization="8" tooltip="Root box of Choregraphe&apos;s behavior. Highest level possible." x="0" y="0">
+    <bitmap>media/images/box/root.png</bitmap>
+    <script language="4">
+      <content>
+        <![CDATA[]]>
+      </content>
+    </script>
+    <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+    <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+    <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+    <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+    <Timeline enable="0">
+      <BehaviorLayer name="behavior_layer1">
+        <BehaviorKeyframe name="keyframe1" index="1">
+          <Diagram>
+            <Box name="Python Script" id="3" localization="8" tooltip="This box contains a basic python script and can be used to create any python script box you would like.&#x0A;&#x0A;To edit its script, double-click on it." x="184" y="218">
+              <bitmap>media/images/box/box-python-script.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        pass
+
+    def onUnload(self):
+        pass
+
+    def onInput_onStart(self):
+        import time
+
+        # Käytetään TTS- ja Motion-proxya
+        from naoqi import ALProxy
+        tts = ALProxy("ALTextToSpeech", "127.0.0.1", 9559)
+        motion = ALProxy("ALMotion", "127.0.0.1", 9559)
+
+        # Varmistetaan että robotti on hereillä
+        motion.wakeUp()
+
+        # Alkuviesti
+        tts.say("Tehdään käsien ja olkapään liikkuvuus jumppa.")
+
+        # Viisi toistoa
+        for i, numero in enumerate(["Yksi", "Kaksi", "Kolme", "Neljä", "Viisi"], start=1):
+            # Nostetaan kädet ylös
+            names  = ["LShoulderPitch", "RShoulderPitch"]
+            angles = [-1.0, -1.0]  # kädet ylös
+            fractionMaxSpeed = 0.1
+            motion.setAngles(names, angles, fractionMaxSpeed)
+
+            time.sleep(3)  # odotetaan että kädet nousevat hitaasti
+
+            # Sanotaan numero
+            tts.say(numero)
+
+            # Lasketaan kädet alas
+            angles = [1.5, 1.5]  # kädet alas
+            motion.setAngles(names, angles, fractionMaxSpeed)
+
+            time.sleep(3)
+
+        # Lopetus
+        tts.say("Hyvä! Sillälailla!")
+
+        self.onStopped()  # Aktivoi boksin output
+
+    def onInput_onStop(self):
+        self.onUnload()
+        self.onStopped()]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+              <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+            </Box>
+            <Box name="Python Script (1)" id="1" localization="8" tooltip="This box contains a basic python script and can be used to create any python script box you would like.&#x0A;&#x0A;To edit its script, double-click on it." x="441" y="74">
+              <bitmap>media/images/box/box-python-script.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        pass
+
+    def onUnload(self):
+        pass
+
+    def onInput_onStart(self):
+        import time
+        from naoqi import ALProxy
+
+        # Proxy yhteydet
+        tts = ALProxy("ALTextToSpeech", "127.0.0.1", 9559)
+        motion = ALProxy("ALMotion", "127.0.0.1", 9559)
+
+        # Herätetään robotti
+        motion.wakeUp()
+
+        # Viisi toistoa
+        for numero in ["Yksi", "Kaksi", "Kolme", "Neljä", "Viisi"]:
+            # Nostetaan kädet sivulle ylös
+            names  = ["LShoulderRoll", "RShoulderRoll"]
+            angles = [1.3, -1.3]  # kädet ylös sivuille
+            fractionMaxSpeed = 0.1
+            motion.setAngles(names, angles, fractionMaxSpeed)
+
+            time.sleep(3)
+
+            # Sanotaan numero
+            tts.say(numero)
+
+            # Lasketaan kädet alas
+            angles = [0.0, 0.0]  # kädet alas vartalon viereen
+            motion.setAngles(names, angles, fractionMaxSpeed)
+
+            time.sleep(3)
+
+        # Lopetusviesti
+        tts.say("Hyvä! Reipasta toimintaa.")
+
+        self.onStopped()  # aktivoi boksin outputin
+
+    def onInput_onStop(self):
+        self.onUnload()
+        self.onStopped()]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+              <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+            </Box>
+            <Box name="Python Script (2)" id="2" localization="8" tooltip="This box contains a basic python script and can be used to create any python script box you would like.&#x0A;&#x0A;To edit its script, double-click on it." x="700" y="227">
+              <bitmap>media/images/box/box-python-script.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        pass
+
+    def onUnload(self):
+        pass
+
+    def onInput_onStart(self):
+        import time
+        from naoqi import ALProxy
+
+        # Proxy-yhteydet
+        tts = ALProxy("ALTextToSpeech", "127.0.0.1", 9559)
+        motion = ALProxy("ALMotion", "127.0.0.1", 9559)
+
+        # Herätetään robotti
+        motion.wakeUp()
+
+        # Viisi toistoa
+        for numero in ["Yksi", "Kaksi", "Kolme", "Neljä", "Viisi"]:
+            # --- Etukautta ylös ---
+            names  = ["LShoulderPitch", "RShoulderPitch"]
+            angles = [-1.0, -1.0]   # kädet etukautta ylös
+            motion.setAngles(names, angles, 0.1)
+            time.sleep(3)
+
+            # --- Etukautta alas ---
+            angles = [1.5, 1.5]    # kädet alas
+            motion.setAngles(names, angles, 0.1)
+            time.sleep(3)
+
+            # --- Sivulle ylös ---
+            names  = ["LShoulderRoll", "RShoulderRoll"]
+            angles = [1.3, -1.3]   # kädet sivulle ylös
+            motion.setAngles(names, angles, 0.1)
+            time.sleep(3)
+
+            # --- Sivulle alas ---
+            angles = [0.0, 0.0]    # alas vartalon viereen
+            motion.setAngles(names, angles, 0.1)
+            time.sleep(3)
+
+            # Lasketaan ääneen
+            tts.say(numero)
+
+        # Lopetusviesti
+        tts.say("Hyvä! Erinomaista liikkuvuutta.")
+
+        # Rentoutetaan nivelet
+        motion.rest()
+
+        self.onStopped()
+
+    def onInput_onStop(self):
+        self.onUnload()
+        self.onStopped()]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+              <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+            </Box>
+            <Link inputowner="3" indexofinput="2" outputowner="0" indexofoutput="2" />
+            <Link inputowner="1" indexofinput="2" outputowner="3" indexofoutput="4" />
+            <Link inputowner="2" indexofinput="2" outputowner="1" indexofoutput="4" />
+            <Link inputowner="0" indexofinput="4" outputowner="2" indexofoutput="4" />
+          </Diagram>
+        </BehaviorKeyframe>
+      </BehaviorLayer>
+    </Timeline>
+  </Box>
+</ChoregrapheProject>
